@@ -1,11 +1,19 @@
 from django.db import models
+from django.db.models.signals import post_save
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
-    birthdate = models.DateField(null=True)
-    hometown = models.CharField(max_length=50)
+
+    # --- Automatically generates an authorization Token whenever a user instance is saved. --- #
+    # --- Taken from https://www.django-rest-framework.org/api-guide/authentication/ --- #
+    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    def create_auth_token(sender, instance=None, created=False, **kwargs):
+        if created:
+            Token.objects.create(user=instance)
 
     def __str__(self):
         return self.username
@@ -100,12 +108,19 @@ class Friend(models.Model):
         CONFIRMED = 1
         NO_PENDING_REQUEST = 0
         NO_USER = -1
+        ALREADY_FRIENDS = -2
 
         # find friend user
         try:
             friend = User.objects.get(username=username)
         except User.DoesNotExist:
             return NO_USER
+
+        # check if friendship already exists
+        friendship = Friend.check_for_friendship(current_user=current_user, friend=friend, friend_status=1)
+
+        if friendship is not None:
+            return ALREADY_FRIENDS
 
         # find pending requests made to current_user
         pending_request = Friend.objects.filter(friend_A=friend) \

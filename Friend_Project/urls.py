@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from Friend_Class.views import UserProfile, AddFriend, DeleteFriend, ShowFriends, ConfirmFriend
+from Friend_Class.views import FriendView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
