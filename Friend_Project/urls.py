@@ -19,9 +19,5 @@ from Friend_Class.views import UserProfile, AddFriend, DeleteFriend, ShowFriends
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^user_profile/(?P<username>[\w.@+-]+)', UserProfile.as_view(), name = 'user_profile'),
-    url(r'^add_friend/(?P<username>[\w.@+-]+)', AddFriend.as_view(), name = 'add_friend'),
-    url(r'^confirm_friend/(?P<username>[\w.@+-]+)', ConfirmFriend.as_view(), name = 'confirm_friend'),
-    url(r'^show_friends/(?P<username>[\w.@+-]+)', ShowFriends.as_view(), name = 'show_friends'),
-    url(r'^delete_friend/(?P<username>[\w.@+-]+)', DeleteFriend.as_view(), name = 'delete_friend'),
+    url(r'^friend/(?P<username>[\w.@+-]+)', FriendView.as_view(), name='friend_view'),
 ]

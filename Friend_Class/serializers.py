@@ -1,16 +1,6 @@
 from rest_framework import serializers
-from Friend_Class.models import User, Friend
+from Friend_Class.models import Friend
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('__all__')
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'birthdate', 'hometown')
 
 class FriendSerializer(serializers.ModelSerializer):
     friend_A = serializers.SlugRelatedField(
